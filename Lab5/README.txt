@@ -1,7 +1,3 @@
-5 3
-7 5 3
-3 2 2
-9 0 2
-2 2 2
-4 3 3
-3 3 2
+Justin Burlock
+CS3790 Lab 5
+Bankers Algorithm
