@@ -158,10 +158,10 @@ void bankersAlgorithm(int m, int n, intMat maxMatrix, intArr availableVector){
 
         if(!compareVectors(requestVector, needMatrix[proc])){
             cout << "Denied - Exceeded Maximum Claim\n";
-            dumpData(maxMatrix, allocationMatrix, needMatrix, availableVector);
+            //dumpData(maxMatrix, allocationMatrix, needMatrix, availableVector);
         }else if(!compareVectors(requestVector, availableVector)){
             cout << "Denied - Not Enough Resources Available\n";
-            dumpData(maxMatrix, allocationMatrix, needMatrix, availableVector);
+            //dumpData(maxMatrix, allocationMatrix, needMatrix, availableVector);
         }else{
 
             //If both are true SIMULATE granting the request
@@ -189,9 +189,9 @@ void bankersAlgorithm(int m, int n, intMat maxMatrix, intArr availableVector){
                 cout << "Denied - System Left In Unsafe State\n";
             }
 
-            dumpData(maxMatrix, allocationMatrix, needMatrix, availableVector);
-
         }
+
+        dumpData(maxMatrix, allocationMatrix, needMatrix, availableVector);
 
 
     }
