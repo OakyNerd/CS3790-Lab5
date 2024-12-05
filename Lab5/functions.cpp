@@ -32,13 +32,70 @@ void dumpData(intMat maxMatrix, intMat allocationMatrix, intMat needMatrix, intA
 
 }
 
-tokenVec seperateTokens(string &s){
+tokenVec tokenize(const string &str, char delim){
     tokenVec tokens;
+    stringstream ss(str);
+    string token;
 
-    for(auto i: s){
+    while(getline(ss, token, delim)){
+        tokens.push_back(token);
+    }
+    return tokens;
+}
 
+void addVectors(intArr &a, intArr &b, bool change){
+    //Add vector a to vector b and set a to all 0
+    for(int i = 0; i < a.size(); i++){
+        b[i] += a[i];
+        if(change){
+            a[i] = 0;
+        }
+    }
+}
+
+void subtractVectors(intArr &a, intArr &b, bool change){
+    //Subtract vector a from vector b and set a to all 0
+    for(int i = 0; i < a.size(); i++){
+        b[i] -= a[i];
+        if(change){
+            a[i] = 0;
+        }
+    }
+}
+
+bool compareVectors(intArr a, intArr b){
+     //Return true if a < b OR if a == b. false if -1 if a > b
+
+    //This method works under the assumption the vectors are the same length
+
+    for(int i = 0; i < a.size(); i++){
+        if(a[i] > b[i]){
+            return false;
+        }
+    }
+    return true;
+}
+
+bool safetyAlgorithm(intArr available, intMat needMatrix, intMat &allocationMatrix){
+
+    intArr work = available;
+    vector<bool> finish(needMatrix.size(), false);
+
+    for(int i = 0; i < needMatrix.size(); i++){
+        if(!finish[i] && compareVectors(needMatrix[i], work)){
+            //Allocate it's resources to work
+            addVectors(allocationMatrix[i], work, false);
+            finish[i] = true;
+        }
     }
 
+    for(int i = 0; i < finish.size(); i++){
+        if(finish[i] == false){
+            return false; //Unsafe state
+        }
+    }
+
+    return true;
 }
 
 void bankersAlgorithm(int m, int n, intMat maxMatrix, intArr availableVector){
