@@ -1,13 +1,14 @@
 #include "functions.hpp"
 
-void dumpVec(intArr v){
-    for(int i = 0; i < v.size(); i++) cout << ((i == 0)? "(" + to_string(v[i]): to_string(v[i])) << ((i == v.size()-1)? ")\n": ", ");
+void dumpVec(intArr v, bool m){
+    for(int i = 0; i < v.size(); i++) cout << ((i == 0)? "(" + to_string(v[i]): to_string(v[i])) << ((i == v.size()-1)? ")": ", ");
+    if(!m) cout << endl;
 }
 
 void dumpMatrix(intMat m){
     for(int i = 0; i < m.size(); i++){
         if(i == 0) cout << "[";
-        dumpVec(m[i]);
+        dumpVec(m[i], true);
         if( i == m.size()-1){
             cout << "]\n\n";
         }else{
@@ -28,7 +29,7 @@ void dumpData(intMat maxMatrix, intMat allocationMatrix, intMat needMatrix, intA
     dumpMatrix(needMatrix);
 
     cout << "Available Vector:\n";
-    dumpVec(availableVector);
+    dumpVec(availableVector, false);
 
 }
 
@@ -102,7 +103,7 @@ void bankersAlgorithm(int m, int n, intMat maxMatrix, intArr availableVector){
 
     /*Create other two vectors*/
 
-    intMat allocationMatrix(m, intArr(n, 0)); //Initialize all to 0 as nothing has been allocated
+    intMat allocationMatrix(n, intArr(m, 0)); //Initialize all to 0 as nothing has been allocated
     intMat needMatrix = maxMatrix; //Creates a copy as resources haven't been allocated yet
 
     while(true){
@@ -118,6 +119,18 @@ void bankersAlgorithm(int m, int n, intMat maxMatrix, intArr availableVector){
         if(proc == -1){
             break; /*Break out of the while-loop*/
         }
+
+        intArr requestVector;
+        int num;
+
+        cout << "Enter request vector: ";
+        for(int i = 0; i < m; i++){
+            cin >> num;
+            requestVector.push_back(num);
+        }
+
+        cout << "Process " << proc << " with request vector ";
+        dumpVec(requestVector, false);
 
         /*Prompt user for the request vector for that process*/
 

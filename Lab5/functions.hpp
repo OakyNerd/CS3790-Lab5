@@ -19,7 +19,7 @@ using tokenVec = vector<string>;
 /*Function declarations*/
 
 tokenVec tokenize(const string &str, char delim); //Generic method for seperating tokens because I don't wanna write mine anymore boss
-void dumpVec(intArr v);
+void dumpVec(intArr v, bool m);
 void dumpMatrix(intMat m);
 void dumpData(intMat maxMatrix, intMat allocationMatrix, intMat needMatrix, intArr availableVector);
 void addVectors(intArr &a, intArr &b, bool change);
