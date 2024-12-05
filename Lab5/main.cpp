@@ -48,6 +48,8 @@ int main(int argc, char** argv){
     //Then we seperate tokens
     tokens = tokenize(line, ' ');
 
+    inputFile.close(); //Close my file as I'm done reading information
+
     // if(tokens.size() != m){
     //     return 1;
     // }

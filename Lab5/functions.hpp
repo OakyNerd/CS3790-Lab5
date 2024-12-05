@@ -22,10 +22,10 @@ tokenVec tokenize(const string &str, char delim); //Generic method for seperatin
 void dumpVec(intArr v, bool m);
 void dumpMatrix(intMat m);
 void dumpData(intMat maxMatrix, intMat allocationMatrix, intMat needMatrix, intArr availableVector);
-void addVectors(intArr &a, intArr &b, bool change);
-void subtractVectors(intArr &a, intArr &b, bool change);
+void addVectors(intArr &a, intArr &b);
+void subtractVectors(intArr &a, intArr &b);
 bool compareVectors(intArr a, intArr b);
-bool safetyAlgorithm(intArr available, intMat needMatrix); //Safety algorithm
+bool safetyAlgorithm(intArr work, intMat allocation, intArr request); //Safety algorithm
 void bankersAlgorithm(int m, int n, intMat maxMatrix, intArr availableVector); //Rest of the algorithm
 
 #endif

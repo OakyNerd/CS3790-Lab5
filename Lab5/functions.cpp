@@ -44,24 +44,27 @@ tokenVec tokenize(const string &str, char delim){
     return tokens;
 }
 
-void addVectors(intArr &a, intArr &b, bool change){
-    //Add vector a to vector b and set a to all 0
+void addVectors(intArr &a, intArr &b){
+    //Add vector a to vector b
     for(int i = 0; i < a.size(); i++){
         b[i] += a[i];
-        if(change){
-            a[i] = 0;
-        }
     }
 }
 
-void subtractVectors(intArr &a, intArr &b, bool change){
-    //Subtract vector a from vector b and set a to all 0
+void subtractVectors(intArr &a, intArr &b){
+    //Subtract vector a from vector b
     for(int i = 0; i < a.size(); i++){
         b[i] -= a[i];
-        if(change){
-            a[i] = 0;
+    }
+}
+
+bool vectorIsZero(intArr v){
+    for(int i = 0; i < v.size(); i++){
+        if(v[i] != 0){
+            return false;
         }
     }
+    return true;
 }
 
 bool compareVectors(intArr a, intArr b){
@@ -77,26 +80,30 @@ bool compareVectors(intArr a, intArr b){
     return true;
 }
 
-bool safetyAlgorithm(intArr available, intMat needMatrix, intMat &allocationMatrix){
+bool safetyAlgorithm(intArr work, intMat allocation, intArr request){
 
-    intArr work = available;
-    vector<bool> finish(needMatrix.size(), false);
-
-    for(int i = 0; i < needMatrix.size(); i++){
-        if(!finish[i] && compareVectors(needMatrix[i], work)){
-            //Allocate it's resources to work
-            addVectors(allocationMatrix[i], work, false);
+    //Let work and finish be vectors of size m and n respectively
+    //We pass in a copy of available to be our work vector
+    vector<bool> finish(allocation.size(), false);
+    for(int i = 0; i < finish.size(); i++){
+        if(vectorIsZero(allocation[i])){
             finish[i] = true;
         }
     }
 
     for(int i = 0; i < finish.size(); i++){
-        if(finish[i] == false){
-            return false; //Unsafe state
+        if(!finish[i] && compareVectors(request, work)){
+            addVectors(allocation[i], work); //Add allocation to work
+            finish[i] = true;
         }
     }
 
+    for(int i = 0; i < finish.size(); i++){
+        if(!finish[i]) return false;
+    }
+
     return true;
+    
 }
 
 void bankersAlgorithm(int m, int n, intMat maxMatrix, intArr availableVector){
@@ -113,11 +120,21 @@ void bankersAlgorithm(int m, int n, intMat maxMatrix, intArr availableVector){
         int proc;
         intArr reqVec;
 
-        cout << "Enter process number: ";
-        cin >> proc;
+        while(true){
 
-        if(proc == -1){
-            break; /*Break out of the while-loop*/
+            cout << "Enter process number: ";
+            cin >> proc;
+
+            if(proc > n){
+                cout << "Invalid process. Try again.\n";
+            }else{
+                break;
+            }
+
+        }
+
+        if(proc < 0){
+            break;
         }
 
         intArr requestVector;
@@ -135,15 +152,47 @@ void bankersAlgorithm(int m, int n, intMat maxMatrix, intArr availableVector){
         //Now the fun begins
 
         //Check if Request <= Need[i]
+            //If not then DENY - Exceeded maximum claim
         //Check if Request <= Available
+            //If not then DENY - Not enough resources available
 
-        //If both are true SIMULATE granting the request
+        if(!compareVectors(requestVector, needMatrix[proc])){
+            cout << "Denied - Exceeded Maximum Claim\n";
+            dumpData(maxMatrix, allocationMatrix, needMatrix, availableVector);
+        }else if(!compareVectors(requestVector, availableVector)){
+            cout << "Denied - Not Enough Resources Available\n";
+            dumpData(maxMatrix, allocationMatrix, needMatrix, availableVector);
+        }else{
 
-        //Available = Available - Request
-        //Allocation[i] = Allocation[i] + Request
-        //Need[i] = Need[i] - Request[i]
+            //If both are true SIMULATE granting the request
 
-        //If the system remains in a safe state, grant. Else, revert and deny.
+            //Available = Available - Request
+            //Allocation[i] = Allocation[i] + Request
+            //Need[i] = Need[i] - Request
+
+            subtractVectors(requestVector, availableVector);
+            addVectors(requestVector, allocationMatrix[proc]);
+            subtractVectors(requestVector, needMatrix[proc]);
+
+            //dumpData(maxMatrix, allocationMatrix, needMatrix, availableVector);
+
+            //If the system remains in a safe state, grant. Else, revert and deny.
+
+            if(safetyAlgorithm(availableVector, allocationMatrix, requestVector)){
+                //Keep the changes and grant
+                cout << "Granted\n";
+            }else{
+                //Revert the changes and Deny - System Left In Unsafe State
+                addVectors(requestVector, availableVector);
+                subtractVectors(requestVector, allocationMatrix[proc]);
+                addVectors(requestVector, needMatrix[proc]);
+                cout << "Denied - System Left In Unsafe State\n";
+            }
+
+            dumpData(maxMatrix, allocationMatrix, needMatrix, availableVector);
+
+        }
+
 
     }
 
