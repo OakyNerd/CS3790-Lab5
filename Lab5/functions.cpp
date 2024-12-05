@@ -131,10 +131,22 @@ void bankersAlgorithm(int m, int n, intMat maxMatrix, intArr availableVector){
                 break;
             }
 
+            cin.clear();
+            while (cin.get() != '\n') 
+            {
+                continue;
+            }
+
         }
 
         if(proc < 0){
             break;
+        }
+
+        cin.clear();
+        while (cin.get() != '\n') 
+        {
+            continue;
         }
 
         intArr requestVector;
