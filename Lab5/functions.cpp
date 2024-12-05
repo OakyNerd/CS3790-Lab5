@@ -132,18 +132,18 @@ void bankersAlgorithm(int m, int n, intMat maxMatrix, intArr availableVector){
         cout << "Process " << proc << " with request vector ";
         dumpVec(requestVector, false);
 
-        /*Prompt user for the request vector for that process*/
+        //Now the fun begins
 
+        //Check if Request <= Need[i]
+        //Check if Request <= Available
 
+        //If both are true SIMULATE granting the request
 
-        /*Tell the user the request is acceptable/not acceptable*/
+        //Available = Available - Request
+        //Allocation[i] = Allocation[i] + Request
+        //Need[i] = Need[i] - Request[i]
 
-
-
-        /*If it is acceptable, tell the user if the request is denied (and why) or accepted*/
-
-
-
+        //If the system remains in a safe state, grant. Else, revert and deny.
 
     }
 
